@@ -9,6 +9,8 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import { execArgv } from "process";
+import { register } from "./controllers/auth.js";
+import authRoutes from "./routes/authRoute.js";
 
 /*---- CONFIGURATIONN ----*/
 const __filename = fileURLToPath(import.meta.url);
@@ -34,3 +36,19 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage });
+
+/*---- ROUTES DEFINATION ----*/
+app.post("/auth/register", upload.single("picture"), register);
+
+app.use("/auth", authRoutes);
+
+/*---- MONGO CONNECTION ----*/
+const PORT = process.env.PORT;
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server Started on port: ${PORT}`));
+  })
+  .catch((error) => {
+    console.log(`${error} failed to connect`);
+  });
