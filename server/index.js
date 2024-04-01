@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import { execArgv } from "process";
 import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/authRoute.js";
+import userRoutes from "./routes/usersRoute.js";
 
 /*---- CONFIGURATIONN ----*/
 const __filename = fileURLToPath(import.meta.url);
@@ -41,6 +42,7 @@ const upload = multer({ storage });
 app.post("/auth/register", upload.single("picture"), register);
 
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 
 /*---- MONGO CONNECTION ----*/
 const PORT = process.env.PORT;
